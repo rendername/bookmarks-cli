@@ -28,22 +28,22 @@ int help() {
     return 0;
 }
 
-int execute(Command c, int argc, char** argv) {
+int execute(Command c, int argc, char** argv, FILE *pFile) {
     switch(c.commandIndex) {
         case Help:
             return help();
             break;
         case List:
-            return list();
+            return list(pFile);
             break;
         case Add:
-            return add(argc, argv);
+            return add(argc, argv, pFile);
             break;
         case Edit:
             return edit(argc, argv);
             break;
         case Search:
-            return search(argc, argv);
+            return search(argc, argv, pFile);
             break;
         default:
             return help();

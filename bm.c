@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "command.h"
+#include "storage.h"
 
 int main(int argc, char* argv[]) {
     if(argc < 2) {
@@ -16,6 +17,15 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    const char *storage_path = getStoragePath();
+    FILE *pFile;
+    pFile = fopen(storage_path, "r+");
 
-    return execute(c, argc, argv);
+    if(pFile == NULL) {
+        fprintf(stderr, "could not print %s", storage_path);
+    }
+
+    int execute_result = execute(c, argc, argv, pFile);
+    fclose(pFile);
+    return execute_result;
 }

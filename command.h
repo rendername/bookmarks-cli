@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef COMMAND_H
 #define COMMAND_H
 
@@ -18,6 +20,6 @@ int getCommandIndex(char* commandString);
 
 int help();
 int list();
-int execute(Command c, int argc, char** argv);
+int execute(Command c, int argc, char** argv, FILE *pFile);
 
 #endif // !COMMAND_H

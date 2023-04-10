@@ -12,16 +12,7 @@ void search_usage() {
     printf("\tbookmarks edit google\n");
 }
 
-int searchFileForShortname(char *search_term, char *result) {
-    FILE *pFile;
-
-    pFile = fopen(getStoragePath(), "r");
-
-    if(pFile == NULL) {
-        fputs("could not open file for searching\n", stderr);
-        return -1;
-    }
-
+int searchFileForShortname(char *search_term, char *result, FILE *pFile) {
     while(fgets(result, MAX_STRING, pFile) != NULL) {
         char tokenized[MAX_STRING];
         strcpy(tokenized, result);
@@ -31,16 +22,14 @@ int searchFileForShortname(char *search_term, char *result) {
         }
         
         if(strcmp(search_term, tokenized) == 0) {
-            fclose(pFile);
             return 0;
         }
     }
 
-    fclose(pFile);
     return -1;
 }
 
-int search(int argc, char **argv) {
+int search(int argc, char **argv, FILE *pFile) {
     if(argc < 3) {
         search_usage();
         return -1;
@@ -48,7 +37,7 @@ int search(int argc, char **argv) {
 
     char *search_term = argv[2];
     char line[MAX_STRING];
-    if(searchFileForShortname(search_term, line) == 0) {
+    if(searchFileForShortname(search_term, line, pFile) == 0) {
         printf("%s", line);
     }
 
