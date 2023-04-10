@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <string.h>
+#include "search.h"
 #include "add.h"
 #include "storage.h"
 
-void usage() {
+#define MAX_PATH 8192
+#define MAX_STRING 8192
+
+void add_usage() {
     printf("add usage:\n");
     printf("\tbookmarks add SHORTNAME URL [TAGS]\n\n");
     printf("examples:\n");
@@ -13,38 +17,40 @@ void usage() {
 
 int add(int argc, char** argv) {
     if(argc < 4) {
-        usage();
+        add_usage();
         return -1;
     }
 
-    const char* filePath = "test.txt";
+    char *shortname = argv[2];
+    char search_result[MAX_STRING];
+    if(searchFileForShortname(shortname, search_result) == 0) {
+        printf("cannot add bookmark for %s, it already exsits\n", shortname);
+        return -1;
+    }
 
-    FILE *pFile = fopen(filePath, "w");
+    const char* filePath = getStoragePath();
+    FILE *pFile = fopen(filePath, "a");
     if(pFile == NULL) {
         printf("Error could not open file: %s\n", filePath);
         return -1;
     }
 
-    char* workingText = join(argv[2], " ", argv[3]);
+    char buffer[MAX_PATH];
+    strcat(buffer, argv[2]);
+    strcat(buffer, " ");
+    strcat(buffer, argv[3]);
 
-    if(argc > 4) {
+    if(argc > 4) { // we have at least one tag
+        strcat(buffer, " ");
         for(int i=4;i<argc;i++) {
-            workingText = join(workingText, ",", argv[i]);
+            strcat(buffer, argv[i]);
+            strcat(buffer, ",");
         }
     }
 
-    printf("%s\n", workingText);
-    
+    strcat(buffer, "\n");
+    fprintf(pFile, "%s", buffer);
     fclose(pFile);
-
-    // 1. open file
-    // 2. look if SHORTNAME is in file case sensitive
-    // if exists notify, show the record, and return -1
-    // if not exists
-    // 3. append SHORTNAME, URL, and optional tags to file
-    // 4. close file
-    // 5. return success
-    
 
     return 0;
 }

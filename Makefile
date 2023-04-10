@@ -1,6 +1,6 @@
-all: main.c command.c add.c storage.c
-	gcc main.c command.c add.c storage.c -o main
+all: *.c
+	gcc *.c -o bm
 
-clean: main
-	rm -f ./main
+clean: bm
+	rm -f ./bm
 

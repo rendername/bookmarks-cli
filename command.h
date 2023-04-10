@@ -1,10 +1,12 @@
-#ifndef command
-#define command
+#ifndef COMMAND_H
+#define COMMAND_H
 
 enum eCommand {
     Help,
     List,
     Add,
+    Edit,
+    Search,
 };
 
 typedef struct Command {
@@ -18,4 +20,4 @@ int help();
 int list();
 int execute(Command c, int argc, char** argv);
 
-#endif // !command
+#endif // !COMMAND_H

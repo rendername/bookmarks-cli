@@ -9,13 +9,3 @@ char* getStoragePath() {
     
     return strcat(home, pathSuffix);
 }
-
-char* join(char* a, const char* separator, char* b) {
-    char result[1024];
-    strcat(result, a);
-    strcat(result, separator);
-    strcat(result, b);
-
-    char *pResult = result;
-    return pResult;
-}

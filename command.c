@@ -1,13 +1,18 @@
 #include "command.h"
 #include "add.h"
+#include "list.h"
+#include "edit.h"
+#include "search.h"
 #include <stdio.h>
 #include <string.h>
 
-const int commandCount = 3;
+const int commandCount = 5;
 const char* commandList[] = {
     "help",
     "list",
     "add",
+    "edit",
+    "search",
 };
 
 int getCommandIndex(char* commandString) {
@@ -23,12 +28,6 @@ int help() {
     return 0;
 }
 
-int list() {
-    // if file not exists || file is empty then no bookmarks
-    printf("running list\n");
-    return 0;
-}
-
 int execute(Command c, int argc, char** argv) {
     switch(c.commandIndex) {
         case Help:
@@ -39,6 +38,12 @@ int execute(Command c, int argc, char** argv) {
             break;
         case Add:
             return add(argc, argv);
+            break;
+        case Edit:
+            return edit(argc, argv);
+            break;
+        case Search:
+            return search(argc, argv);
             break;
         default:
             return help();
