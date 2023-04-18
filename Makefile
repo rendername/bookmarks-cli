@@ -1,6 +1,5 @@
 all: *.c
-	gcc *.c -o bm
+	gcc -g *.c -l ncurses -o main
 
-clean: bm
-	rm -f ./bm
-
+clean: main
+	rm -f ./main

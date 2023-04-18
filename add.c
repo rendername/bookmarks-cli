@@ -1,39 +1,44 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include "search.h"
+
 #include "add.h"
-#include "storage.h"
+#include "command.h"
+#include "search.h"
 
-#define MAX_PATH 8192
-#define MAX_STRING 8192
-
-void add_usage() {
+void add_usage(void) {
     printf("add usage:\n");
-    printf("\tbookmarks add SHORTNAME URL [TAGS]\n\n");
-    printf("examples:\n");
-    printf("\tbookmarks add google google.com search\n");
-    printf("\tbookmarks add amazon amazon.com shopping prime movies\n");
 }
 
-int add(int argc, char** argv, FILE *pFile) {
+int add(Command *command, int argc, char **argv) {
     if(argc < 4) {
-        add_usage();
-        return -1;
+        fputs("add command requires at least 3 arguments\n", stderr);
+        return EXIT_FAILURE;
     }
 
     char *shortname = argv[2];
-    char search_result[MAX_STRING];
-    if(searchFileForShortname(shortname, search_result, pFile) == 0) {
-        printf("cannot add bookmark for %s, it already exsits\n", shortname);
-        return -1;
+
+    SearchResult *search_result = search_file(command->storage_path, shortname);
+
+    if(search_result->found == 1) {
+        printf("the bookmark \"%s\" already exists, not adding\n", shortname);
+        return EXIT_SUCCESS;
     }
 
-    char buffer[MAX_PATH];
+    FILE *fp;
+    fp = fopen(command->storage_path, "a");
+
+    if(fp == NULL) {
+        fputs("could not open bookmarks file for writing\n", stderr);
+        return EXIT_FAILURE;
+    }
+
+    char buffer[MAX_LINE];
     strcat(buffer, argv[2]);
     strcat(buffer, " ");
     strcat(buffer, argv[3]);
 
-    if(argc > 4) { // we have at least one tag
+    if(argc > 4) {
         strcat(buffer, " ");
         for(int i=4;i<argc;i++) {
             strcat(buffer, argv[i]);
@@ -41,8 +46,9 @@ int add(int argc, char** argv, FILE *pFile) {
         }
     }
 
-    strcat(buffer, "\n");
-    fprintf(pFile, "%s", buffer);
+    fprintf(fp, "%s\n", buffer);
 
-    return 0;
+    fclose(fp);
+
+    return EXIT_SUCCESS;
 }

@@ -1,8 +1,9 @@
-#include <stdio.h>
-
 #ifndef LIST_H
 #define LIST_H
 
-int list(FILE *pFile);
+#include "command.h"
 
-#endif // !LIST_H
+void list_usage(void);
+int list(Command *command);
+
+#endif // LIST_H

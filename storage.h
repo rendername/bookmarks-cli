@@ -1,7 +1,11 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
-char* getStoragePath();
-char* join(char* a, const char* separator, char* b);
+#include <stdlib.h>
+#include <string.h>
 
-#endif // !STORAGE_H
+#define PATH_SUFFIX "/.config/bookmarks.txt"
+
+char * get_storage_path(void);
+
+#endif // STORAGE_H

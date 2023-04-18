@@ -1,25 +1,25 @@
-#include <stdio.h>
-
 #ifndef COMMAND_H
 #define COMMAND_H
 
+#include <stdio.h>
+
+#define COMMAND_COUNT 5
+
 enum eCommand {
+    Add,
     Help,
     List,
-    Add,
-    Edit,
     Search,
+    Delete,
 };
 
 typedef struct Command {
-    char* commandString;
-    int commandIndex;
+    int command_index;
+    char *command_string;
+    char *storage_path;
 } Command;
 
-int getCommandIndex(char* commandString);
+int get_command_index(char *command_string);
+int execute(Command *command, int argc, char **argv);
 
-int help();
-int list();
-int execute(Command c, int argc, char** argv, FILE *pFile);
-
-#endif // !COMMAND_H
+#endif // end COMMAND_H

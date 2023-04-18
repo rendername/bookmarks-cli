@@ -1,8 +1,9 @@
-#include <stdio.h>
-
 #ifndef ADD_H
 #define ADD_H
 
-int add(int argc, char** argv, FILE *pFile);
+#include "command.h"
 
-#endif // !ADD_H
+void add_usage(void);
+int add(Command *command, int argc, char **argv);
+
+#endif // ADD_H

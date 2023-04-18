@@ -1,23 +1,28 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+
+#include "command.h"
 #include "list.h"
 #include "storage.h"
 
-void list_usage() {
+void list_usage(void) {
     printf("list usage:\n");
-    printf("\tbookmarks list\n\n");
-    printf("examples:\n");
-    printf("\tbookmarks list\n");
 }
 
-int list(FILE *pFile) {
-    const char* filePath = getStoragePath();
+int list(Command *command) {
+    FILE *fp;
+    fp = fopen(command->storage_path, "r");
 
-    char current;
-    while(current != EOF) {
-        current = fgetc(pFile);
-        printf("%c", current);
+    if(!fp) {
+        fputs("Error opening storage file\n", stderr);
+        return EXIT_FAILURE;
     }
 
-    return 0;
+    char c;
+    while((c = fgetc(fp)) != EOF) {
+        printf("%c", c);
+    }
+
+    fclose(fp);
+    return EXIT_SUCCESS;
 }

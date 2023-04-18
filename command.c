@@ -1,52 +1,51 @@
+#include <string.h>
+#include <stdlib.h>
+
 #include "command.h"
 #include "add.h"
+#include "help.h"
 #include "list.h"
-#include "edit.h"
 #include "search.h"
-#include <stdio.h>
-#include <string.h>
+#include "delete.h"
 
-const int commandCount = 5;
-const char* commandList[] = {
+char *command_list[COMMAND_COUNT] = {
+    "add",
     "help",
     "list",
-    "add",
-    "edit",
     "search",
+    "delete",
 };
 
-int getCommandIndex(char* commandString) {
-    for(int i=0;i<commandCount;i++) {
-        if(strcmp(commandString, commandList[i]) == 0)
+int get_command_index(char *command_string) {
+    for(int i=0;i<COMMAND_COUNT;i++) {
+        if(strcmp(command_string, command_list[i]) == 0) {
             return i;
+        }
     }
     return -1;
 }
 
-int help() {
-    printf("running help\n");
-    return 0;
-}
-
-int execute(Command c, int argc, char** argv, FILE *pFile) {
-    switch(c.commandIndex) {
+int execute(Command *command, int argc, char **argv) {
+    switch(command->command_index) {
         case Help:
             return help();
             break;
-        case List:
-            return list(pFile);
-            break;
         case Add:
-            return add(argc, argv, pFile);
+            return add(command, argc, argv);
             break;
-        case Edit:
-            return edit(argc, argv);
+        case List:
+            return list(command);
             break;
         case Search:
-            return search(argc, argv, pFile);
+            return search(command, argc, argv);
+            break;
+        case Delete:
+            return delete_bookmark(command, argc, argv);
             break;
         default:
             return help();
             break;
     }
+
+    return EXIT_FAILURE;
 }
