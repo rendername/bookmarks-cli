@@ -1,5 +1,5 @@
 all: *.c
-	gcc -g *.c -l ncurses -o main
+	gcc -g *.c -o main
 
 install:
 	sudo cp ./main /usr/bin/bm
